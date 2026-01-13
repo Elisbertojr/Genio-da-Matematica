@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <title>Gênio da Matemática</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8948326507672314"
-     crossorigin="anonymous"></script>
 
 <style>
 * { box-sizing: border-box; }
@@ -84,6 +82,11 @@ button {
     to { transform: translateY(100vh) rotate(360deg); }
 }
 </style>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8948326507672314"
+     crossorigin="anonymous"></script>
+
+
 </head>
 <body>
 
@@ -107,8 +110,25 @@ button {
     </div>
 </div>
 
+<div id="anuncio" style="display:none; margin-top:15px; text-align:center;">
+    <p>🎁 Você ganhou uma nova chance!</p>
+
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-8948326507672314"
+         data-ad-slot="4692608728"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+
+    <button onclick="continuarJogo()" style="margin-top:10px;">
+        ▶ Continuar
+    </button>
+</div>
+
+
 <script>
-let pontos = 0;
+let pontos = 0; 
+let vidaExtraDisponivel = true;
 let recorde = localStorage.getItem("recorde") || 0;
 document.getElementById("recorde").innerText = recorde;
 
@@ -120,6 +140,37 @@ let cronometro;
 // Sons
 const somAcerto = new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg");
 const somErro = new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg");
+
+function mostrarAnuncioVidaExtra() {
+    if (!vidaExtraDisponivel) {
+        salvarRecorde();
+        pontos = 0;
+        document.getElementById("pontos").innerText = pontos;
+        novaPergunta();
+        return;
+    }
+
+    vidaExtraDisponivel = false;
+    document.getElementById("anuncio").style.display = "block";
+
+    try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {}
+}
+
+function continuarJogo() {
+    document.getElementById("anuncio").style.display = "none";
+
+    tempo = tempoPorNivel() + 30; // ⏱️ +30s
+    document.getElementById("tempo").innerText = tempo;
+
+    cronometro = setInterval(() => {
+        tempo--;
+        document.getElementById("tempo").innerText = tempo;
+        if (tempo <= 0) tempoEsgotado();
+    }, 1000);
+}
+
 
 function nivelAtual() {
     if (pontos < 10) return "Aprendiz";
@@ -235,6 +286,10 @@ function gerarGenio() {
 function novaPergunta() {
     clearInterval(cronometro);
 
+    vidaExtraDisponivel = true;
+    document.getElementById("anuncio").style.display = "none";
+
+
     let nivel = nivelAtual();
     document.getElementById("nivel").innerText = nivel;
 
@@ -274,12 +329,9 @@ function tempoEsgotado() {
 
     alert(`⏱️ Tempo acabou!\n\n${perguntaAtual} = ${resultado}`);
 
-    salvarRecorde(); // 👈 salva antes de zerar
-
-    pontos = 0;
-    document.getElementById("pontos").innerText = pontos;
-    novaPergunta();
+    mostrarAnuncioVidaExtra();
 }
+
 
 
 function verificar() {
@@ -293,17 +345,14 @@ function verificar() {
         document.getElementById("pontos").innerText = pontos;
         novaPergunta();
     } else {
-        clearInterval(cronometro);
-        somErro.play();
+    clearInterval(cronometro);
+    somErro.play();
 
-        alert(`❌ Ops!\n\n${perguntaAtual} = ${resultado}`);
+    alert(`❌ Ops!\n\n${perguntaAtual} = ${resultado}`);
 
-        salvarRecorde(); // 👈 salva antes de zerar
+    mostrarAnuncioVidaExtra();
+}
 
-        pontos = 0;
-        document.getElementById("pontos").innerText = pontos;
-        novaPergunta();
-    }
 }
 
 
@@ -312,4 +361,3 @@ novaPergunta();
 
 </body>
 </html>
-

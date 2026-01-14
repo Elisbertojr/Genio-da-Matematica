@@ -172,6 +172,11 @@ function continuarJogo() {
     }, 1000);
 }
 
+function iniciarJogo() {
+    pontos = 0;
+    vidaExtraDisponivel = true;
+    novaPergunta();
+}
 
 function nivelAtual() {
     if (pontos < 10) return "Aprendiz";
@@ -287,7 +292,6 @@ function gerarGenio() {
 function novaPergunta() {
     clearInterval(cronometro);
 
-    vidaExtraDisponivel = true;
     document.getElementById("anuncio").style.display = "none";
 
 
@@ -362,5 +366,6 @@ novaPergunta();
 
 </body>
 </html>
+
 
 
